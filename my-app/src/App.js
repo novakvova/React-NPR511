@@ -4,8 +4,9 @@ import './App.css';
 function App() {
   return (
     <>
-      <h1 style={{textAlign: "center"}}>Привіт команда :)</h1>
-      
+      {/*<h1 style={{textAlign: "center"}}>Привіт команда :)</h1>*/}
+      <h1 className={"my-header"}>Привіт команда :)</h1>
+
     </>
   );
 }
