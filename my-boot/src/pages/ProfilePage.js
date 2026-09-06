@@ -5,16 +5,24 @@ import {zodResolver} from "@hookform/resolvers/zod"; //імпортуємо Zod 
 //react-hook-forms - для роботи з форами на клієнті
 
 //Робимо схему валіації даних
+// Схема валідації
 const profileSchema = z.object({
     firstName: z
-        .string() //Людина має вводити текст - рядок
-        .min(2,"Ім'я має мати щонайменша 2 символи") //мін довжина символів
-        .max(50, "Ім'я занадто довге"), //максимум скільки символів
+        .string()
+        .min(2, "Ім'я має мати щонайменше 2 символи")
+        .max(50, "Ім'я занадто довге"),
+    lastName: z
+        .string()
+        .min(2, "Прізвище має мати щонайменше 2 символи")
+        .max(50, "Прізвище занадто довге"),
+    email: z.string().email("Некоректна email адреса"),
 });
 
 //Поля, які будуть на формі
 const defaultValues = {
     firstName: "",
+    lastName: "",
+    email: "",
 };
 
 const ProfilePage = () =>
@@ -28,7 +36,7 @@ const ProfilePage = () =>
     } = useForm({
         resolver: zodResolver(profileSchema),
         defaultValues, //Це об'єкт, який описує нашу форму
-        mode: "onBlur",
+        // mode: "onBlur",
     }); // Налаштувати форму для роботи
 
     const onSubmit = (data) => {
@@ -37,21 +45,52 @@ const ProfilePage = () =>
         console.log("Form Data:", data);
     }
 
+    console.log("--errors--", errors.firstName, isDirty);
+
     return (
         <>
             <h1 className={"text-center"}>Профіль користувача</h1>
 
             <div className="container mt-2">
-                <form className="col-md-6 offset-md-3">
-                    {/* ПІБ */}
+                {/*у нас react-hook-forms - буде обробляти подію відправки форми*/}
+                <form onSubmit={handleSubmit(onSubmit)} className="col-md-6 offset-md-3">
+                    {/* Ім'я */}
                     <div className="mb-3">
                         <label htmlFor="firstName" className="form-label">Ім'я</label>
                         <input
                             type="text"
-                            className={`form-control`}
+                            className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
                             id="firstName"
                             placeholder="Іван"
+                            {...register("firstName")}
                         />
+                        {errors.firstName && <div className="invalid-feedback">{errors.firstName.message}</div>}
+                    </div>
+
+                    {/* Прізвище */}
+                    <div className="mb-3">
+                        <label htmlFor="lastName" className="form-label">Прізвище</label>
+                        <input
+                            type="text"
+                            className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
+                            id="lastName"
+                            placeholder="Мельник"
+                            {...register("lastName")}
+                        />
+                        {errors.lastName && <div className="invalid-feedback">{errors.lastName.message}</div>}
+                    </div>
+
+                    {/* Електронна пошта */}
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">Електронна пошта</label>
+                        <input
+                            type="text"
+                            className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                            id="email"
+                            placeholder="ss@ss.ss"
+                            {...register("email")}
+                        />
+                        {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
                     </div>
 
                     <button type="submit" className="btn btn-success">Зберегти</button>
