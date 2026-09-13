@@ -6,6 +6,7 @@ import {Route, Routes} from "react-router";
 import HomePage from "./pages/home/HomePage";
 import Layout from "./components/layout/Layout";
 import NoMatchPage from "./pages/noMatch/NoMatchPage";
+import RegisterPage from "./pages/register/RegisterPage";
 
 function App() {
     return (
@@ -14,7 +15,7 @@ function App() {
                 <Route path={"/"} element={<Layout/>}>
                     <Route index element={<HomePage/>}/>
                     <Route path={"login"} element={<LoginPage/>}/>
-                    
+                    <Route path={"register"} element={<RegisterPage/>}/>
                     <Route path={"*"} element={<NoMatchPage/>}/>
                 </Route>
             </Routes>

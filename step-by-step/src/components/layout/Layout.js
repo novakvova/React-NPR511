@@ -13,5 +13,5 @@ const Layout = () => {
 }
 
 // <Outlet/> - буде піставлятия дочірній компонент у маршруті
-//До прикладу HomePage, LoginPage або інша сторінка
+//До прикладу HomePage, RegisterPage або інша сторінка
 export default Layout;
