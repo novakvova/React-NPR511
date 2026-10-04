@@ -1,8 +1,10 @@
-import type {ILoginType} from "./types.ts";
+import type {ILoginResponse, ILoginType} from "./types.ts";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {loginSchema} from "./validate.ts";
 import axios from "axios";
+import {useAuth} from "../../context/AuthContext.tsx";
+import {useNavigate} from "react-router";
 
 const LoginPage = () => {
     //Ми працюємо з нашими типами, які є у програмі
@@ -12,6 +14,9 @@ const LoginPage = () => {
         email: "",
         password: "",
     }
+    //Будемо використовувати для входу метод login із useAuth
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     //console.log("defaultValues: ", defaultValues);
 
@@ -33,9 +38,15 @@ const LoginPage = () => {
         const url = "https://qrcode31kn-api.itstep.click/api/Account/Login";
         // Найпростіший спосіб відправити запит на сервер - fetch, але я люблю axios
         try {
-            const response = await axios.post(url, data);
-            console.log("Response server: ", response);
-            alert("Вітаємо дані вказано вірно :)");
+            const response =
+                await axios.post<ILoginResponse>(url, data);
+            // console.log("Response server: ", response.data.token);
+            //LocalStorage - зберігають інформацію про користувача - token
+            //const userInfo = jwtDecode<ITokenInfo>(response.data.token);
+            //console.log("User info: ", userInfo);
+            //alert("Вітаємо дані вказано вірно :)");
+            login(response.data.token);
+            navigate("/");
         }
         catch (e) {
             console.log("Помилка запиту: ", e);
